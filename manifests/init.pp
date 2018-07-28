@@ -61,7 +61,7 @@ class observium (
         ensure => present,
         content => "http://www.observium.org/observium-community-latest.tar.gz",
       }
-      exec { "extract observium"
+      exec { "extract_observium":
         command => "tar zxvf observium-community-latest.tar.gz",
       }
     }
