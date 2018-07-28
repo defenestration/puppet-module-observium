@@ -35,19 +35,39 @@ class observium (
 
   include observium::apache
 
+  file { 'observium_path':
+    ensure => directory,
+    name   => $base_path,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+
   case $::osfamily {
     'Debian': {
       $default_packages = 'observium'
+      if $packages == 'USE_DEFAULTS' {
+        $my_packages = $default_packages
+      } else {
+        $my_packages = $packages
+      }
+      package { 'observium_packages':
+        ensure  => installed,
+        name    => $my_packages,
+      }
+    }
+    'RedHat': {
+      file { "$base_path/observium-community-latest.tar.gz":
+        ensure => present,
+        content => "http://www.observium.org/observium-community-latest.tar.gz",
+      }
+      exec { "extract observium"
+        command => "tar zxvf observium-community-latest.tar.gz",
+      }
     }
     default: {
       fail("Module observium is supported on osfamily Debian. Your osfamily is identified as ${::osfamily}")
     }
-  }
-
-  if $packages == 'USE_DEFAULTS' {
-    $my_packages = $default_packages
-  } else {
-    $my_packages = $packages
   }
 
   if $users {
@@ -58,19 +78,6 @@ class observium (
   if $devices {
     validate_array($devices)
     observium::device { $devices: }
-  }
-
-  package { 'observium_packages':
-    ensure  => installed,
-    name    => $my_packages,
-  }
-
-  file { 'observium_path':
-    ensure => directory,
-    name   => $base_path,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
   }
 
   file { 'observium_config':
