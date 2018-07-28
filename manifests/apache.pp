@@ -5,7 +5,7 @@ class observium::apache {
   include apache
   include apache::params
 
-  apache::mod { 'rewrite': }
+  ensure_resource( 'apache::mod',  'rewrite' )
 
   apache::vhost { 'observium':
     priority           => '10',
