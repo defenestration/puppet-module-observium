@@ -62,7 +62,7 @@ class observium (
         content => "http://www.observium.org/observium-community-latest.tar.gz",
       }
       exec { "extract_observium":
-        command => "tar zxvf observium-community-latest.tar.gz",
+        command => "tar zxvf observium-community-latest.tar.gz -C $base_path",
       }
     }
     default: {
@@ -87,7 +87,7 @@ class observium (
     owner   => $config_owner,
     group   => $config_group,
     content => template('observium/config.php.erb'),
-    require => Package['observium_packages'],
+    # require => Package['observium_packages'],ss
     notify  => Exec['update_db'],
   }
 
