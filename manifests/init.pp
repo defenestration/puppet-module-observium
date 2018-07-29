@@ -3,6 +3,7 @@
 # This module manages Observium
 #
 class observium (
+  $main_dir                  = '/opt',
   $base_path                 = '/opt/observium',
   $config_path               = '/opt/observium/config.php',
   $config_mode               = '0755',
@@ -57,12 +58,12 @@ class observium (
       }
     }
     'RedHat': {
-      file { "$base_path/observium-community-latest.tar.gz":
+      file { "$main_dir/observium-community-latest.tar.gz":
         ensure => present,
         content => "http://www.observium.org/observium-community-latest.tar.gz",
       }
       exec { "extract_observium":
-        command => "tar zxvf ${base_path}/observium-community-latest.tar.gz -C $base_path",
+        command => "tar zxvf ${main_dir}/observium-community-latest.tar.gz -C $main_dir",
       }
     }
     default: {
@@ -104,7 +105,7 @@ class observium (
     path        => '/bin:/usr/bin:/usr/local/bin',
     command     => 'php includes/update/update.php',
     cwd         => $base_path,
-    refreshonly => true,
+    refreshonly => true, 
   }
 
   cron { 'discovery-all':
