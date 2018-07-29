@@ -6,7 +6,8 @@ class observium::apache {
   include apache::params
 
   ensure_resource( 'apache::mod',  'rewrite' )
-
+  ensure_resource( 'apache::mod::php' )
+  
   apache::vhost { 'observium':
     priority           => '10',
     port               => $observium::http_port,
