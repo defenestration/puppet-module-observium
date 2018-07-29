@@ -63,7 +63,7 @@ class observium (
         content => "http://www.observium.org/observium-community-latest.tar.gz",
       } ~>
       exec { "extract_observium":
-        command => "/usr/bin/dtar zxvf ${main_dir}/observium-community-latest.tar.gz -C $main_dir",
+        command => "/usr/bin/tar zxvf ${main_dir}/observium-community-latest.tar.gz -C $main_dir",
       }
     }
     default: {
